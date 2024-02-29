@@ -16,9 +16,8 @@ import {
   Typography,
   CardContent,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { fetchData } from "../components/book/bookSlice";
+import { fetchData } from "../components/book/bookSlice.js";
+import { useDispatch, useSelector } from "react-redux";
 
 const BACKEND_API = process.env.REACT_APP_BACKEND_API;
 
@@ -38,6 +37,7 @@ const HomePage = () => {
 
   useEffect(() => {
     dispatch(fetchData({ pageNum, limit: 20, query }));
+    console.log("qury", query);
   }, [dispatch, pageNum, limit, query]);
 
   //--------------form
@@ -51,13 +51,15 @@ const HomePage = () => {
   const onSubmit = (data) => {
     setQuery(data.searchQuery);
   };
+  //----------------
+
   return (
     <Container>
       <Stack sx={{ display: "flex", alignItems: "center", m: "2rem" }}>
         <Typography variant="h3" sx={{ textAlign: "center" }}>
           Book Store
         </Typography>
-        {status && <Alert severity="danger">{status}</Alert>}
+        {status && <Alert severity="error">{status}</Alert>}
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Stack
             spacing={2}
@@ -87,7 +89,7 @@ const HomePage = () => {
             justifyContent="space-around"
             flexWrap="wrap"
           >
-            {books.map((book) => (
+            {books?.map((book) => (
               <Card
                 key={book.id}
                 onClick={() => handleClickBook(book.id)}
